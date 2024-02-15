@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lab3_201177/widgets/AuthGate.dart';
-import '';
 
 import '../domain/Exam.dart';
 import '../widgets/NewExam.dart';
@@ -18,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final CollectionReference _itemsCollection =
       FirebaseFirestore.instance.collection('exams');
-  List<Exam> _exams = [];
 
   void _addExam() {
     showModalBottomSheet(
@@ -45,12 +43,12 @@ class _HomeScreenState extends State<HomeScreen> {
     if (user != null) {
       return FirebaseFirestore.instance
           .collection('exams')
-          .add({'subject': subject, 'date': newDate, 'userId': user.uid});
+          .add({'subjectName': subject, 'examDate': newDate, 'userId': user.uid});
     }
 
     return FirebaseFirestore.instance
         .collection('exams')
-        .add({'subject': subject, 'date': newDate, 'userId': 'invalid'});
+        .add({'subjectName': subject, 'examDate': newDate, 'userId': 'invalid'});
   }
 
   Future<void> _signOutAndNavigateToLogin(BuildContext context) async {
@@ -71,8 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
     if (user != null) {
       // Find the document with matching subject, date, and userId
       var query = _itemsCollection
-          .where('subject', isEqualTo: subject)
-          .where('date', isEqualTo: date)
+          .where('subjectName', isEqualTo: subject)
+          .where('examDate', isEqualTo: date)
           .where('userId', isEqualTo: user.uid);
 
       query.get().then((querySnapshot) {
